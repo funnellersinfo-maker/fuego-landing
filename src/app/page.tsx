@@ -38,7 +38,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <span className="block text-[3.5rem] sm:text-[7rem] md:text-[9rem] lg:text-[11rem] text-white/[0.07] select-none">
+            <span className="block text-[3.5rem] sm:text-[7rem] md:text-[9rem] lg:text-[11rem] text-white/[0.18] select-none">
               PRUEBA EL.
             </span>
             <span className="block text-[4.5rem] sm:text-[8rem] md:text-[10rem] lg:text-[13rem] text-flame -mt-4 sm:-mt-8 md:-mt-12 lg:-mt-16 drop-shadow-[0_0_40px_rgba(255,69,0,0.6)]">
@@ -46,18 +46,15 @@ export default function Home() {
             </span>
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Subtitle — max 2 lines */}
           <motion.p
-            className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg lg:text-xl text-white/80 max-w-lg mx-auto leading-relaxed"
+            className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg lg:text-xl text-white/80 max-w-md sm:max-w-lg mx-auto leading-snug"
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             No hacemos comida rápida. Hacemos comida real, rápido.
-            <br className="hidden sm:block" />
-            <span className="text-gold font-medium">
-              Ingredientes de origen, sabor legendario.
-            </span>
+            <span className="text-gold font-medium"> Ingredientes de origen, sabor legendario.</span>
           </motion.p>
 
           {/* CTA */}
