@@ -1,76 +1,114 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Image from 'next/image';
+
+const VIDEO_DURATION = 8; // seconds
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
 
-  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '80%']);
-  const opacityText = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  // Text parallax
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '60%']);
+  const opacityText = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  // Scroll-driven video scrubbing
+  const updateVideoFrame = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || video.readyState < 2) return;
+
+    const progress = scrollYProgress.get();
+    const targetTime = progress * VIDEO_DURATION;
+
+    // Only seek if the difference is significant (avoid stuttering)
+    if (Math.abs(video.currentTime - targetTime) > 1 / 30) {
+      video.currentTime = targetTime;
+    }
+  }, [scrollYProgress]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Preload video fully before enabling scrubbing
+    video.preload = 'auto';
+
+    const unsubscribe = scrollYProgress.on('change', () => {
+      requestAnimationFrame(updateVideoFrame);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [scrollYProgress, updateVideoFrame]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[300vh] bg-black overflow-hidden"
+      className="relative min-h-[200vh] sm:min-h-[250vh] bg-black overflow-hidden"
     >
-      {/* ── Fire Background ── */}
-      <div className="fixed inset-0 z-0">
-        <Image
-          src="/fire-bg.png"
-          alt=""
-          fill
-          className="object-cover opacity-40"
-          priority
-          quality={85}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
-      </div>
+      {/* ── Sticky Viewport ── */}
+      <div className="sticky top-0 h-screen w-full z-10 flex flex-col items-center justify-center overflow-hidden">
 
-      {/* ── Floating Embers ── */}
-      <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-flame"
-            style={{
-              left: `${Math.random() * 100}%`,
-              bottom: '0%',
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-            }}
-            animate={{
-              y: [0, -300 - Math.random() * 400],
-              x: [0, (Math.random() - 0.5) * 80],
-              opacity: [0, 0.9, 0.3, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: 'easeOut',
-            }}
+        {/* ── Video Background ── */}
+        <div className="absolute inset-0 z-0">
+          <video
+            ref={videoRef}
+            src="/hero-video.mp4"
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover object-center md:object-contain"
+            style={{ filter: 'brightness(0.7) contrast(1.1)' }}
           />
-        ))}
-      </div>
 
-      {/* ── Hero Content (sticky viewport) ── */}
-      <div className="sticky top-0 h-screen z-10 flex flex-col items-center justify-center overflow-hidden">
+          {/* Gradient overlays for text readability — no visual noise */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
 
-        {/* ── Text Block — centered ── */}
+          {/* Subtle vignette for depth */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.6)_100%)]" />
+        </div>
+
+        {/* ── Floating Embers ── */}
+        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-flame"
+              style={{
+                left: `${Math.random() * 100}%`,
+                bottom: '0%',
+                width: `${Math.random() * 3 + 1}px`,
+                height: `${Math.random() * 3 + 1}px`,
+              }}
+              animate={{
+                y: [0, -300 - Math.random() * 400],
+                x: [0, (Math.random() - 0.5) * 80],
+                opacity: [0, 0.7, 0.2, 0],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 4,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+                ease: 'easeOut',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* ── Hero Text ── */}
         <motion.div
           className="relative z-20 w-full text-center px-4"
           style={{ y: textY, opacity: opacityText }}
         >
-          <h1
-            className="font-[family-name:var(--font-archivo-black)] uppercase tracking-tighter leading-[0.85]"
-          >
+          <h1 className="font-[family-name:var(--font-archivo-black)] uppercase tracking-tighter leading-[0.85]">
             <span className="block text-[3rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] text-white/10 select-none">
               PRUEBA EL.
             </span>
@@ -101,7 +139,6 @@ export default function HeroSection() {
             transition={{ delay: 1.2, duration: 0.6, type: 'spring' }}
           >
             <button className="group relative px-5 sm:px-8 py-3 sm:py-4 bg-flame text-white font-[family-name:var(--font-archivo-black)] text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-full neon-glow transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
-              {/* Glow ring */}
               <span className="absolute inset-0 rounded-full bg-flame/20 blur-xl group-hover:bg-flame/30 transition-colors duration-300" />
               <span className="absolute inset-0 rounded-full border-2 border-gold/30 group-hover:border-gold/60 transition-colors duration-300" />
               <span className="relative z-10 flex items-center gap-2">
