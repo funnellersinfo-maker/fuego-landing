@@ -63,44 +63,44 @@ export default function HeroSection() {
       </div>
 
       {/* ── Hero Content (sticky viewport) ── */}
-      <div className="sticky top-0 h-screen z-10 flex flex-col items-center justify-center overflow-hidden">
-        {/* Main Hero Image - 70% of screen height */}
+      <div className="sticky top-0 h-screen z-10 flex flex-col items-center overflow-hidden">
+        {/* Main Hero Image — upper half */}
         <motion.div
-          className="relative w-full h-[70vh] max-h-[800px]"
+          className="relative w-full flex-1 min-h-0 flex items-end justify-center"
           style={{ y: imageY }}
         >
           <Image
             src="/hero-burger.png"
             alt="Premium gourmet burger - FUEGO restaurant"
             fill
-            className="object-contain object-center"
+            className="object-contain object-bottom"
             priority
             quality={95}
             sizes="100vw"
           />
           {/* Radial glow behind burger */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,69,0,0.15)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_bottom,rgba(255,69,0,0.15)_0%,transparent_60%)]" />
         </motion.div>
 
-        {/* ── Overlapping Text (Dopamine Style) ── */}
+        {/* ── Text Block — below burger, no overlap ── */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 z-20 text-center px-4 pb-8 md:pb-16"
+          className="relative z-20 w-full text-center px-4 pt-2 pb-8 md:pb-12 flex-shrink-0"
           style={{ y: textY, opacity: opacityText }}
         >
           <h1
-            className="font-[family-name:var(--font-archivo-black)] uppercase tracking-tighter leading-none"
+            className="font-[family-name:var(--font-archivo-black)] uppercase tracking-tighter leading-[0.85]"
           >
-            <span className="block text-[3rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] text-white/10 select-none">
+            <span className="block text-[2.2rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] text-white/10 select-none">
               PRUEBA EL.
             </span>
-            <span className="block text-[4rem] sm:text-[7rem] md:text-[9rem] lg:text-[12rem] text-flame -mt-4 sm:-mt-8 md:-mt-10 lg:-mt-14 drop-shadow-[0_0_30px_rgba(255,69,0,0.5)]">
+            <span className="block text-[3rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8.5rem] text-flame -mt-1 sm:-mt-2 md:-mt-3 drop-shadow-[0_0_30px_rgba(255,69,0,0.5)]">
               FUEGO.
             </span>
           </h1>
 
           {/* Subtitle */}
           <motion.p
-            className="mt-4 md:mt-6 text-sm sm:text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed px-4"
+            className="mt-2 md:mt-3 text-xs sm:text-sm md:text-base text-white/70 max-w-xl mx-auto leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
@@ -114,12 +114,12 @@ export default function HeroSection() {
 
           {/* CTA Button */}
           <motion.div
-            className="mt-8 md:mt-10"
+            className="mt-4 md:mt-5"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, duration: 0.6, type: 'spring' }}
           >
-            <button className="group relative px-6 sm:px-10 py-4 sm:py-5 bg-flame text-white font-[family-name:var(--font-archivo-black)] text-sm sm:text-base md:text-lg uppercase tracking-wider rounded-full neon-glow transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
+            <button className="group relative px-5 sm:px-8 py-3 sm:py-4 bg-flame text-white font-[family-name:var(--font-archivo-black)] text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-full neon-glow transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
               {/* Glow ring */}
               <span className="absolute inset-0 rounded-full bg-flame/20 blur-xl group-hover:bg-flame/30 transition-colors duration-300" />
               <span className="absolute inset-0 rounded-full border-2 border-gold/30 group-hover:border-gold/60 transition-colors duration-300" />
