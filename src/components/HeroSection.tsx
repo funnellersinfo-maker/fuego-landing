@@ -12,8 +12,6 @@ export default function HeroSection() {
     offset: ['start start', 'end start'],
   });
 
-  // Parallax: image moves slower than text
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '80%']);
   const opacityText = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
@@ -63,44 +61,27 @@ export default function HeroSection() {
       </div>
 
       {/* ── Hero Content (sticky viewport) ── */}
-      <div className="sticky top-0 h-screen z-10 flex flex-col items-center overflow-hidden">
-        {/* Main Hero Image — upper half */}
-        <motion.div
-          className="relative w-full flex-1 min-h-0 flex items-end justify-center"
-          style={{ y: imageY }}
-        >
-          <Image
-            src="/hero-burger.png"
-            alt="Premium gourmet burger - FUEGO restaurant"
-            fill
-            className="object-contain object-bottom"
-            priority
-            quality={95}
-            sizes="100vw"
-          />
-          {/* Radial glow behind burger */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_bottom,rgba(255,69,0,0.15)_0%,transparent_60%)]" />
-        </motion.div>
+      <div className="sticky top-0 h-screen z-10 flex flex-col items-center justify-center overflow-hidden">
 
-        {/* ── Text Block — below burger, no overlap ── */}
+        {/* ── Text Block — centered ── */}
         <motion.div
-          className="relative z-20 w-full text-center px-4 pt-2 pb-8 md:pb-12 flex-shrink-0"
+          className="relative z-20 w-full text-center px-4"
           style={{ y: textY, opacity: opacityText }}
         >
           <h1
             className="font-[family-name:var(--font-archivo-black)] uppercase tracking-tighter leading-[0.85]"
           >
-            <span className="block text-[2.2rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] text-white/10 select-none">
+            <span className="block text-[3rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] text-white/10 select-none">
               PRUEBA EL.
             </span>
-            <span className="block text-[3rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8.5rem] text-flame -mt-1 sm:-mt-2 md:-mt-3 drop-shadow-[0_0_30px_rgba(255,69,0,0.5)]">
+            <span className="block text-[4rem] sm:text-[7rem] md:text-[9rem] lg:text-[12rem] text-flame -mt-4 sm:-mt-8 md:-mt-10 lg:-mt-14 drop-shadow-[0_0_30px_rgba(255,69,0,0.5)]">
               FUEGO.
             </span>
           </h1>
 
           {/* Subtitle */}
           <motion.p
-            className="mt-2 md:mt-3 text-xs sm:text-sm md:text-base text-white/70 max-w-xl mx-auto leading-relaxed px-4"
+            className="mt-4 md:mt-6 text-sm sm:text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
@@ -114,7 +95,7 @@ export default function HeroSection() {
 
           {/* CTA Button */}
           <motion.div
-            className="mt-4 md:mt-5"
+            className="mt-8 md:mt-10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, duration: 0.6, type: 'spring' }}
