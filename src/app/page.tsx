@@ -16,16 +16,21 @@ export default function Home() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.play().catch(() => {
-      // Fallback: try again on first user interaction
-      const tryPlay = () => {
-        video.play().catch(() => {});
-        document.removeEventListener('click', tryPlay);
-        document.removeEventListener('touchstart', tryPlay);
-      };
-      document.addEventListener('click', tryPlay, { once: true });
-      document.addEventListener('touchstart', tryPlay, { once: true });
-    });
+    // Force play on mount
+    const play = () => {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    };
+    // Try immediately
+    play();
+    // Also try on loadeddata
+    video.addEventListener('loadeddata', play);
+    // Also try on canplay
+    video.addEventListener('canplay', play);
+    return () => {
+      video.removeEventListener('loadeddata', play);
+      video.removeEventListener('canplay', play);
+    };
   }, []);
 
   return (
@@ -38,8 +43,8 @@ export default function Home() {
             loop
             muted
             playsInline
+            autoPlay
             preload="auto"
-            src="/hero-video.mp4"
             style={{
               position: 'absolute',
               top: '50%',
@@ -52,7 +57,10 @@ export default function Home() {
               objectFit: 'cover',
               filter: 'brightness(0.55) contrast(1.15) saturate(1.3)',
             }}
-          />
+          >
+            <source src="/hero-video.webm" type="video/webm" />
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
 
           {/* Dark vignette — pushes focus to center */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.5)_60%,rgba(0,0,0,0.85)_100%)]" />
