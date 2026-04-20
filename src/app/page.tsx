@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
 import MenuSection from '@/components/MenuSection';
 import ReservationForm from '@/components/ReservationForm';
 import FAQ from '@/components/FAQ';
@@ -11,64 +10,28 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import ChatWidget from '@/components/ChatWidget';
 
 export default function Home() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    // Force play on mount
-    const play = () => {
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    };
-    // Try immediately
-    play();
-    // Also try on loadeddata
-    video.addEventListener('loadeddata', play);
-    // Also try on canplay
-    video.addEventListener('canplay', play);
-    return () => {
-      video.removeEventListener('loadeddata', play);
-      video.removeEventListener('canplay', play);
-    };
-  }, []);
-
   return (
     <>
-      <main className="relative bg-black min-h-screen overflow-hidden">
-        {/* ═══ Video Background — Burger spinning ═══ */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <video
-            ref={videoRef}
-            loop
-            muted
-            playsInline
-            autoPlay
-            preload="auto"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              minWidth: '100%',
-              minHeight: '100%',
-              width: 'auto',
-              height: 'auto',
-              transform: 'translate(-50%, -50%)',
-              objectFit: 'cover',
-              filter: 'brightness(0.55) contrast(1.15) saturate(1.3)',
-            }}
-          >
-            <source src="/hero-video.webm" type="video/webm" />
-            <source src="/hero-video.mp4" type="video/mp4" />
-          </video>
+      {/* ═══ VIDEO BACKGROUND — Fixed behind everything ═══ */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="fixed inset-0 w-screen h-screen object-cover"
+        style={{ zIndex: 0, filter: 'brightness(0.55) contrast(1.15) saturate(1.3)' }}
+      >
+        <source src="/video.mp4" type="video/mp4" />
+      </video>
 
-          {/* Dark vignette — pushes focus to center */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.5)_60%,rgba(0,0,0,0.85)_100%)]" />
+      <main className="relative bg-black min-h-screen overflow-hidden" style={{ zIndex: 1 }}>
+        {/* Dark vignette — pushes focus to center */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.5)_60%,rgba(0,0,0,0.85)_100%)] pointer-events-none" />
 
-          {/* Top & bottom gradient for text breathing room */}
-          <div className="absolute inset-x-0 top-0 h-[20%] bg-gradient-to-b from-black/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-[25%] bg-gradient-to-t from-black/90 to-transparent" />
-        </div>
+        {/* Top & bottom gradient for text breathing room */}
+        <div className="absolute inset-x-0 top-0 h-[20%] bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[25%] bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
 
         {/* ═══ Hero Content ═══ */}
         <div className="relative z-10 flex items-center justify-center min-h-screen px-6 sm:px-10">
