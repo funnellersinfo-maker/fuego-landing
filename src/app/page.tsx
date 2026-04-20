@@ -15,16 +15,34 @@ export default function Home() {
       <main className="relative bg-black min-h-screen overflow-hidden">
         {/* ═══ Video Background — Burger spinning ═══ */}
         <div className="absolute inset-0 z-0">
+          {/* Fallback poster for devices that can't autoplay */}
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: 'url(/hero-burger.png)',
+              filter: 'brightness(0.55) contrast(1.15) saturate(1.3)',
+            }}
+          />
           <video
             autoPlay
             loop
             muted
             playsInline
+            webkit-playsinline="true"
+            x5-playsinline="true"
+            x5-video-player-type="h5"
             preload="auto"
+            poster="/hero-burger.png"
             className="absolute inset-0 w-full h-full object-cover object-center"
             style={{ filter: 'brightness(0.55) contrast(1.15) saturate(1.3)' }}
+            onCanPlay={(e) => {
+              const video = e.currentTarget;
+              video.play().catch(() => {
+                /* autoplay blocked — poster is shown */
+              });
+            }}
           >
-            <source src="/hero-burger.mp4" type="video/mp4" />
+            <source src="/hero-burger.mp4" type="video/mp4; codecs=avc1.42E01E" />
           </video>
 
           {/* Dark vignette — pushes focus to center */}
