@@ -12,29 +12,12 @@ import ChatWidget from '@/components/ChatWidget';
 export default function Home() {
   return (
     <>
-      {/* ═══ VIDEO BACKGROUND — Fixed behind everything ═══ */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="fixed inset-0 w-screen h-screen object-cover"
-        style={{ zIndex: 0, filter: 'brightness(0.55) contrast(1.15) saturate(1.3)' }}
-      >
-        <source src="/video.mp4" type="video/mp4" />
-      </video>
-
-      <main className="relative bg-black min-h-screen overflow-hidden" style={{ zIndex: 1 }}>
-        {/* Dark vignette — pushes focus to center */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.5)_60%,rgba(0,0,0,0.85)_100%)] pointer-events-none" />
-
-        {/* Top & bottom gradient for text breathing room */}
-        <div className="absolute inset-x-0 top-0 h-[20%] bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[25%] bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
+      <main className="relative bg-black min-h-screen overflow-hidden">
+        {/* Subtle ambient glow behind text */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-flame/10 rounded-full blur-[150px] pointer-events-none" />
 
         {/* ═══ Hero Content ═══ */}
-        <div className="relative z-10 flex items-center justify-center min-h-screen px-6 sm:px-10">
+        <div className="relative flex items-center justify-center min-h-screen px-6 sm:px-10">
           <div className="max-w-4xl w-full text-center">
 
             {/* Overlapping Title */}
