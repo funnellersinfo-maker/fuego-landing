@@ -97,8 +97,8 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-white/40">
               <li>Cra 43A #10 Sur-50</li>
               <li>El Poblado, Medellín</li>
-              <li>+57 300 000 0000</li>
-              <li>hola@fuegomedellin.com</li>
+              <li className="whitespace-nowrap">+57 300 000 0000</li>
+              <li className="break-all leading-snug">hola@fuegomedellin.com</li>
             </ul>
           </div>
 
@@ -107,7 +107,7 @@ export default function Footer() {
             <h3 className="font-[family-name:var(--font-archivo-black)] text-xs uppercase tracking-wider text-white/70 mb-4">
               Síguenos
             </h3>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -128,7 +128,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center">
           <p className="text-xs text-white/30">
             © {currentYear} FUEGO. Todos los derechos reservados.
           </p>
