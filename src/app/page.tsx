@@ -12,23 +12,41 @@ import ChatWidget from '@/components/ChatWidget';
 export default function Home() {
   return (
     <>
-      <main className="relative bg-black min-h-screen overflow-hidden">
-        {/* ═══ HERO VIDEO BACKGROUND — Cinematic burger ═══ */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'brightness(0.4) contrast(1.2) saturate(1.3)' }}
-        >
-          <source src="/hero-bg.mp4" type="video/mp4" />
-        </video>
-        {/* Vignette + gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.6)_70%,rgba(0,0,0,0.9)_100%)] pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-[25%] bg-gradient-to-b from-black via-black/40 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[20%] bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+      {/* ═══ HERO — Video BG as body-level element ═══ */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          background: 'url(/hero-bg.mp4) center/cover no-repeat',
+        }}
+      />
+      {/* Fallback: if video-as-bg doesn't work, show poster image */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url(/hero-poster.jpg)',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          filter: 'brightness(0.4) contrast(1.2) saturate(1.3)',
+        }}
+      />
+      {/* Real video layer on top of poster */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="fixed inset-0 z-0 w-full h-full object-cover"
+        style={{ filter: 'brightness(0.4) contrast(1.2) saturate(1.3)' }}
+      >
+        <source src="/hero-bg.mp4" type="video/mp4" />
+      </video>
+
+      <main className="relative z-10 bg-transparent min-h-screen">
+        {/* Vignette + gradients over hero */}
+        <div className="fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.6)_70%,rgba(0,0,0,0.9)_100%)] pointer-events-none" />
+        <div className="fixed inset-x-0 top-0 z-0 h-[25%] bg-gradient-to-b from-black via-black/40 to-transparent pointer-events-none" />
+        <div className="fixed inset-x-0 bottom-0 z-0 h-[20%] bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
 
         {/* ═══ Hero Content ═══ */}
         <div className="relative flex items-center justify-center min-h-screen px-6 sm:px-10">
