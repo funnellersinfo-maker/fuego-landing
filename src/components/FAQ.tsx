@@ -57,7 +57,7 @@ export default function FAQ() {
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
   return (
-    <section id="faq" ref={sectionRef} className="relative py-20 sm:py-28 px-4 sm:px-6 bg-black">
+    <section id="faq" ref={sectionRef} className="relative py-20 sm:py-28 px-4 sm:px-6">
       {/* Subtle background texture */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,69,0,0.03)_0%,transparent_50%)]" />
 

@@ -110,7 +110,7 @@ export default function MenuSection() {
     <section
       id="menu"
       ref={sectionRef}
-      className="relative py-20 sm:py-28 px-4 sm:px-6 bg-black"
+      className="relative py-20 sm:py-28 px-4 sm:px-6"
     >
       {/* Section Header */}
       <div className="max-w-7xl mx-auto text-center mb-12">
