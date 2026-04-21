@@ -91,6 +91,39 @@ export default function Home() {
         {/* ═══ MENU SECTION ═══ */}
         <MenuSection />
 
+        {/* ═══ VIDEO DIVIDER — Papas below menu ═══ */}
+        <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/papas.mp4" type="video/mp4" />
+          </video>
+          {/* Gradient overlays for smooth transition */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/30 to-black" />
+          {/* Center content */}
+          <div className="relative z-10 flex items-center justify-center h-full px-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              <h2 className="font-[family-name:var(--font-archivo-black)] text-3xl sm:text-5xl md:text-7xl text-white uppercase leading-none drop-shadow-[0_0_30px_rgba(255,69,0,0.4)]">
+                CRUNCH <span className="text-gold">&</span> FIRE
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-white/60 max-w-md mx-auto">
+                Nuestras papas artesanales, el acompañante perfecto para cada bocado.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
         {/* ═══ RESERVATION SECTION ═══ */}
         <ReservationForm />
 
