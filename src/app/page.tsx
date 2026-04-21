@@ -13,8 +13,22 @@ export default function Home() {
   return (
     <>
       <main className="relative bg-black min-h-screen overflow-hidden">
-        {/* Subtle ambient glow behind text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-flame/10 rounded-full blur-[150px] pointer-events-none" />
+        {/* ═══ HERO VIDEO BACKGROUND — Cinematic burger ═══ */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'brightness(0.4) contrast(1.2) saturate(1.3)' }}
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+        </video>
+        {/* Vignette + gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.6)_70%,rgba(0,0,0,0.9)_100%)] pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-[25%] bg-gradient-to-b from-black via-black/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[20%] bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
 
         {/* ═══ Hero Content ═══ */}
         <div className="relative flex items-center justify-center min-h-screen px-6 sm:px-10">
