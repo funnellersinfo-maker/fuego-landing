@@ -124,6 +124,9 @@ export default function Home() {
           <MenuSection />
         </div>
 
+        {/* ═══ CHATBOT SECTION — Inline, visible ═══ */}
+        <ChatWidget />
+
         {/* ═══ RESERVATION SECTION ═══ */}
         <ReservationForm />
 
@@ -153,7 +156,6 @@ export default function Home() {
 
       {/* ═══ FLOATING ELEMENTS ═══ */}
       <WhatsAppButton />
-      <ChatWidget />
     </>
   );
 }
