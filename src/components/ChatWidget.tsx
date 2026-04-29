@@ -291,15 +291,26 @@ export default function ChatWidget() {
   const [showCart, setShowCart] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const hasInteracted = useRef(false);
 
   const scrollToBottom = useCallback(() => {
-    requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    });
+    // Only scroll within the chat container, never affect page scroll
+    const container = chatContainerRef.current;
+    const end = messagesEndRef.current;
+    if (container && end) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll after user has interacted (not on initial mount)
+    if (hasInteracted.current) {
+      scrollToBottom();
+    }
   }, [messages, scrollToBottom]);
 
   const addToCart = useCallback((item: MenuItem) => {
@@ -334,6 +345,8 @@ export default function ChatWidget() {
   const sendMessage = useCallback(
     (text: string) => {
       if (!text.trim() || isLoading) return;
+
+      hasInteracted.current = true;
 
       const userMsg: Message = {
         id: `user-${Date.now()}`,
@@ -576,7 +589,10 @@ export default function ChatWidget() {
                   className="flex-1 flex flex-col min-h-0"
                 >
                   {/* Messages list */}
-                  <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 custom-scrollbar">
+                  <div
+                    ref={chatContainerRef}
+                    className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 custom-scrollbar"
+                  >
                     {messages.map((msg) => (
                       <motion.div
                         key={msg.id}
