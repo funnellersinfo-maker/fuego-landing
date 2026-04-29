@@ -21,13 +21,48 @@ interface Message {
   items?: MenuItem[];
 }
 
-const INITIAL_SUGGESTIONS = [
-  { label: '🍔 Ver Menú', message: 'Muéstrame el menú completo' },
-  { label: '🔥 Recomiéndame', message: '¿Qué me recomiendas?' },
-  { label: '💯 Combos', message: '¿Qué combos tienen?' },
-  { label: '📍 Info', message: '¿Dónde están y qué horarios tienen?' },
-  { label: '💳 Pagos', message: '¿Qué métodos de pago aceptan?' },
+interface Suggestion {
+  id: string;
+  label: string;
+  message: string;
+}
+
+// Full pool — never repeats until exhausted
+const SUGGESTION_POOL: Suggestion[] = [
+  { id: 's1', label: '🍔 Ver Menú', message: 'Muéstrame el menú completo' },
+  { id: 's2', label: '🔥 Recomiéndame', message: '¿Qué me recomiendas?' },
+  { id: 's3', label: '💯 Combos', message: '¿Qué combos tienen?' },
+  { id: 's4', label: '📍 Ubicación', message: '¿Dónde están ubicados?' },
+  { id: 's5', label: '💳 Pagos', message: '¿Qué métodos de pago aceptan?' },
+  { id: 's6', label: '🐕 Callejeros', message: '¿Qué comida callejera tienen?' },
+  { id: 's7', label: '🍗 Pollo', message: 'Muéstrame las opciones de pollo' },
+  { id: 's8', label: '🥩 Parrilla', message: '¿Qué tienen de parrilla?' },
+  { id: 's9', label: '🍟 Sides', message: '¿Qué acompañamientos tienen?' },
+  { id: 's10', label: '🥤 Bebidas', message: 'Muéstrame las bebidas disponibles' },
+  { id: 's11', label: '🍨 Postres', message: '¿Qué postres tienen?' },
+  { id: 's12', label: '🆕 Novedades', message: '¿Qué hay de nuevo en el menú?' },
+  { id: 's13', label: '🛵 Domicilio', message: '¿Hacen domicilios?' },
+  { id: 's14', label: '📅 Reservas', message: '¿Cómo puedo reservar mesa?' },
+  { id: 's15', label: '💰 Precios', message: '¿Cuáles son los precios?' },
+  { id: 's16', label: '🌶️ Salsas', message: '¿Qué salsas y extras tienen?' },
+  { id: 's17', label: '⏰ Horarios', message: '¿A qué hora abren y cierran?' },
+  { id: 's18', label: '🏆 Popular', message: '¿Qué es lo más pedido?' },
+  { id: 's19', label: '🧾 Ingredientes', message: '¿Qué lleva la hamburguesa de trufa?' },
+  { id: 's20', label: '💵 Presupuesto', message: '¿Qué puedo comer con $20.000?' },
 ];
+
+const VISIBLE_SUGGESTION_COUNT = 5;
+
+function pickInitialSuggestions(): Suggestion[] {
+  const shuffled = [...SUGGESTION_POOL].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, VISIBLE_SUGGESTION_COUNT);
+}
+
+function pickReplacement(excludeIds: Set<string>): Suggestion | null {
+  const available = SUGGESTION_POOL.filter((s) => !excludeIds.has(s.id));
+  if (available.length === 0) return null;
+  return available[Math.floor(Math.random() * available.length)];
+}
 
 // ═══════════════════════════════════════════════════════
 // INTERNAL CHAT ENGINE — 100% local, no API calls
@@ -289,6 +324,8 @@ export default function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>(() => pickInitialSuggestions());
+  const [usedSuggestionIds, setUsedSuggestionIds] = useState<Set<string>>(() => new Set<string>());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -334,12 +371,27 @@ export default function ChatWidget() {
   const cartTotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
 
+  const sendMessageRef = useRef<(text: string) => void>(() => {});
+
   const handleSuggestionClick = useCallback(
-    (message: string) => {
+    (suggestion: Suggestion) => {
       if (isLoading) return;
-      sendMessage(message);
+
+      // Remove clicked suggestion and replace with a new one
+      setSuggestions((prev) => {
+        const filtered = prev.filter((s) => s.id !== suggestion.id);
+        const allVisibleIds = new Set([...filtered.map((s) => s.id), ...usedSuggestionIds, suggestion.id]);
+        const replacement = pickReplacement(allVisibleIds);
+        if (replacement) {
+          setUsedSuggestionIds((prevUsed) => new Set([...prevUsed, suggestion.id]));
+          return [...filtered, replacement];
+        }
+        return [...filtered, SUGGESTION_POOL[Math.floor(Math.random() * SUGGESTION_POOL.length)]];
+      });
+
+      sendMessageRef.current(suggestion.message);
     },
-    [isLoading] // eslint-disable-line react-hooks/exhaustive-deps
+    [isLoading, usedSuggestionIds] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const sendMessage = useCallback(
@@ -397,6 +449,9 @@ export default function ChatWidget() {
     },
     [isLoading, cart] // eslint-disable-line react-hooks/exhaustive-deps
   );
+
+  // Keep ref in sync so handleSuggestionClick can call sendMessage
+  sendMessageRef.current = sendMessage;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -687,20 +742,26 @@ export default function ChatWidget() {
                     <div ref={messagesEndRef} />
                   </div>
 
-                  {/* Suggestions */}
-                  {messages.length <= 1 && !isLoading && (
+                  {/* Rotating Suggestions — always visible */}
+                  {!isLoading && suggestions.length > 0 && (
                     <div className="px-4 pb-2 shrink-0">
-                      <p className="text-[10px] text-white/20 uppercase tracking-wider mb-2">Preguntas frecuentes</p>
+                      <p className="text-[10px] text-white/20 uppercase tracking-wider mb-2">Ideas rápidas</p>
                       <div className="flex flex-wrap gap-1.5">
-                        {INITIAL_SUGGESTIONS.map((s) => (
-                          <button
-                            key={s.label}
-                            onClick={() => handleSuggestionClick(s.message)}
-                            className="rounded-full border border-flame/20 bg-flame/5 px-3 py-1.5 text-[11px] text-flame/80 hover:bg-flame/15 hover:border-flame/40 transition-colors cursor-pointer"
-                          >
-                            {s.label}
-                          </button>
-                        ))}
+                        <AnimatePresence initial={false}>
+                          {suggestions.map((s) => (
+                            <motion.button
+                              key={s.id}
+                              initial={{ opacity: 0, scale: 0.8, y: 5 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.7, y: -5 }}
+                              transition={{ duration: 0.25 }}
+                              onClick={() => handleSuggestionClick(s)}
+                              className="rounded-full border border-flame/20 bg-flame/5 px-3 py-1.5 text-[11px] text-flame/80 hover:bg-flame/15 hover:border-flame/40 transition-colors cursor-pointer"
+                            >
+                              {s.label}
+                            </motion.button>
+                          ))}
+                        </AnimatePresence>
                       </div>
                     </div>
                   )}
