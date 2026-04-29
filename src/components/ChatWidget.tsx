@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Flame, ShoppingBag, ChevronDown, Minus, Plus, Trash2, MessageCircle } from 'lucide-react';
+import { X, Send, Flame, ShoppingBag, Minus, Plus, Trash2, MessageCircle } from 'lucide-react';
 import { menuCategories, formatPrice, type MenuItem } from '@/data/menu';
 
 const WHATSAPP_NUMBER = '573202761748';
@@ -142,14 +142,14 @@ export default function ChatWidget() {
           .filter((m) => m.role !== 'system')
           .map((m) => ({ role: m.role, content: m.content }));
 
-        const response = await fetch('/api/chat', {
+        const replyContent = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: chatHistory }),
+        }).then(async (res) => {
+          const data = await res.json();
+          return data.reply || data.error || 'Lo siento, hubo un error.';
         });
-
-        const data = await response.json();
-        const replyContent: string = data.reply || data.error || 'Lo siento, hubo un error.';
 
         const assistantMsg: Message = {
           id: `assistant-${Date.now()}`,
