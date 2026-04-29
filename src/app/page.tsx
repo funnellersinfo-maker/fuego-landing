@@ -8,6 +8,7 @@ import MapSection from '@/components/MapSection';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import ChatWidget from '@/components/ChatWidget';
+import ParticleField from '@/components/ParticleField';
 
 export default function Home() {
   return (
@@ -41,6 +42,9 @@ export default function Home() {
       >
         <source src="/hero-bg.mp4" type="video/mp4" />
       </video>
+
+      {/* ═══ PARTICLE FIELD — Embers, smoke & sparks ═══ */}
+      <ParticleField />
 
       <main className="relative z-10 bg-transparent min-h-screen">
         {/* Vignette + gradients over hero */}
