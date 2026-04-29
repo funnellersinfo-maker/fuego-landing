@@ -22,10 +22,10 @@ INFORMACIÓN DEL RESTAURANTE:
 
 MENÚ COMPLETO:
 ${menuCategories.map(cat => {
-  return `\n${cat.name}:\n${cat.items.map(item => 
-    \`  - ${item.name}: ${formatPrice(item.price)} - ${item.description}${item.isNew ? ' [NUEVO]' : ''}${item.isPopular ? ' [POPULAR]' : ''}\\n    Ingredientes: ${item.ingredients.join(', ')}\`
-  ).join('\n')}`;
-}).join('\n')}
+  return '\\n' + cat.name + ':\\n' + cat.items.map(item => 
+    '  - ' + item.name + ': ' + formatPrice(item.price) + ' - ' + item.description + (item.isNew ? ' [NUEVO]' : '') + (item.isPopular ? ' [POPULAR]' : '') + '\\n    Ingredientes: ' + item.ingredients.join(', ')
+  ).join('\\n');
+}).join('\\n')}
 
 REGLAS DE CONVERSACIÓN:
 1. Responde SIEMPRE en español colombiano, cálido y entusiasta

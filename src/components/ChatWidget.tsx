@@ -72,7 +72,6 @@ export default function ChatWidget() {
   const [showCart, setShowCart] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatIdRef = useRef<string>('');
 
   const scrollToBottom = useCallback(() => {
@@ -114,16 +113,6 @@ export default function ChatWidget() {
 
   const cartTotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
-
-  // Prevent scroll on parent page when scrolling inside chat
-  const handleChatScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const atTop = el.scrollTop <= 0;
-    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-    if (!atTop && !atBottom) {
-      e.stopPropagation();
-    }
-  }, []);
 
   const handleSuggestionClick = useCallback(
     (message: string) => {
@@ -237,7 +226,7 @@ export default function ChatWidget() {
         className={`fixed z-[60] flex items-center justify-center rounded-full shadow-lg transition-all cursor-pointer ${
           isOpen
             ? 'bottom-[calc(500px+1rem)] sm:bottom-[calc(540px+1rem)] right-4 sm:right-6 h-10 w-10 bg-white/10 backdrop-blur-md border border-white/20 text-white'
-            : 'bottom-24 right-4 sm:right-6 h-16 w-16 bg-gradient-to-br from-flame to-orange-600 text-white shadow-[0_0_20px_rgba(255,69,0,0.4)]'
+            : 'bottom-6 right-4 sm:right-6 h-16 w-16 bg-gradient-to-br from-flame to-orange-600 text-white shadow-[0_0_20px_rgba(255,69,0,0.4)]'
         }`}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
@@ -274,6 +263,8 @@ export default function ChatWidget() {
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
             className="fixed bottom-2 left-2 right-2 sm:left-auto sm:right-6 sm:bottom-6 z-[60] flex flex-col sm:w-[400px] h-[500px] sm:h-[540px] rounded-2xl overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-2xl shadow-black/50"
             onClick={(e) => e.stopPropagation()}
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
           >
             {/* Header - WhatsApp style */}
             <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#1a0a0a] to-[#0a0a0a] border-b border-white/10 shrink-0">
@@ -393,20 +384,10 @@ export default function ChatWidget() {
                     exit={{ x: '-100%' }}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     className="flex-1 flex flex-col min-h-0"
-                    ref={chatContainerRef}
                   >
                     {/* Messages list */}
                     <div
                       className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 custom-scrollbar"
-                      onScroll={handleChatScroll}
-                      onTouchMove={(e) => {
-                        const el = e.currentTarget;
-                        const atTop = el.scrollTop <= 0;
-                        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-                        if (!atTop && !atBottom) {
-                          e.stopPropagation();
-                        }
-                      }}
                     >
                       {messages.map((msg) => (
                         <motion.div
