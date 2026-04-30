@@ -20,7 +20,7 @@ export default function WhatsAppButton() {
       whileTap={{ scale: 0.9 }}
       aria-label="Haz tu pedido por WhatsApp"
     >
-      <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
+      <span className="absolute inset-0 rounded-full bg-[#25D366] animate-whatsapp-ping" />
       <MessageCircle className="relative z-10 h-6 w-6 fill-white sm:h-7 sm:w-7" />
     </motion.a>
   );

@@ -88,7 +88,7 @@ function MenuCard({ item }: { item: MenuItem }) {
           rel="noopener noreferrer"
           className="block"
         >
-          <Button className="w-full bg-flame hover:bg-flame/80 text-white text-xs uppercase tracking-wider font-semibold h-9 rounded-lg transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,69,0,0.3)]">
+          <Button className="w-full bg-flame hover:bg-flame/80 text-white text-xs uppercase tracking-wider font-semibold h-9 rounded-lg transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,69,0,0.3)] dopamine-hint shimmer-overlay">
             Ordenar Ahora
             <ArrowRight className="h-3.5 w-3.5 ml-1 transition-transform group-hover:translate-x-0.5" />
           </Button>

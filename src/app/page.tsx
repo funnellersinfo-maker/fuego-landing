@@ -8,19 +8,11 @@ import MapSection from '@/components/MapSection';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import ChatWidget from '@/components/ChatWidget';
-import ParticleField from '@/components/ParticleField';
 
 export default function Home() {
   return (
     <>
-      {/* ═══ HERO — Video BG as body-level element ═══ */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          background: 'url(/hero-bg.mp4) center/cover no-repeat',
-        }}
-      />
-      {/* Fallback: if video-as-bg doesn't work, show poster image */}
+      {/* ═══ HERO — Poster fallback + lazy video ═══ */}
       <div
         className="fixed inset-0 z-0"
         style={{
@@ -30,21 +22,19 @@ export default function Home() {
           filter: 'brightness(0.4) contrast(1.2) saturate(1.3)',
         }}
       />
-      {/* Real video layer on top of poster */}
+      {/* Real video layer on top of poster — loaded lazily */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="none"
+        poster="/hero-poster.jpg"
         className="fixed inset-0 z-0 w-full h-full object-cover"
         style={{ filter: 'brightness(0.4) contrast(1.2) saturate(1.3)' }}
       >
         <source src="/hero-bg.mp4" type="video/mp4" />
       </video>
-
-      {/* ═══ PARTICLE FIELD — Embers, smoke & sparks ═══ */}
-      <ParticleField />
 
       <main className="relative z-10 bg-transparent min-h-screen">
         {/* Vignette + gradients over hero */}
@@ -107,19 +97,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ═══ MENU SECTION — Papas video background ═══ */}
+        {/* ═══ MENU SECTION — Static image background (no video) ═══ */}
         <div className="relative">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: 'brightness(0.35) contrast(1.1) saturate(1.2)' }}
-          >
-            <source src="/papas.mp4" type="video/mp4" />
-          </video>
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/hero-poster.jpg)',
+              filter: 'brightness(0.35) contrast(1.1) saturate(1.2)',
+            }}
+          />
           <div className="absolute inset-0 bg-black/60" />
           <MenuSection />
         </div>
@@ -130,19 +116,15 @@ export default function Home() {
         {/* ═══ RESERVATION SECTION ═══ */}
         <ReservationForm />
 
-        {/* ═══ FAQ SECTION — Queso video background ═══ */}
+        {/* ═══ FAQ SECTION — Static image background (no video) ═══ */}
         <div className="relative">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: 'brightness(0.3) contrast(1.1) saturate(1.2)' }}
-          >
-            <source src="/queso.mp4" type="video/mp4" />
-          </video>
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: 'url(/rooftop-medellin.png)',
+              filter: 'brightness(0.3) contrast(1.1) saturate(1.2)',
+            }}
+          />
           <div className="absolute inset-0 bg-black/60" />
           <FAQ />
         </div>

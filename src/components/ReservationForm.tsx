@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
-import { CalendarDays, Clock, Users, Mail, Phone, User, Send } from 'lucide-react';
+import { CalendarDays, Clock, Users, Mail, Phone, User, Send, Sparkles } from 'lucide-react';
 
 const AREAS = [
   {
@@ -303,26 +303,55 @@ export default function ReservationForm() {
           </div>
 
           {/* Submit */}
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full h-12 bg-flame hover:bg-flame/80 text-white font-[family-name:var(--font-archivo-black)] text-sm uppercase tracking-wider rounded-xl neon-glow transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,69,0,0.3)] disabled:opacity-50"
-          >
-            {isSubmitting ? (
-              <motion.span
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className="inline-block"
+          <div className="relative pt-2">
+            {/* Floating badge */}
+            <div className="flex justify-center mb-4">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.5 }}
               >
-                🔥
-              </motion.span>
-            ) : (
-              <span className="flex items-center gap-2">
-                RESERVAR AHORA
-                <Send className="h-4 w-4" />
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-gold/20 to-flame/20 border border-gold/30 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-gold font-semibold dopamine-hint">
+                  <Sparkles className="h-3 w-3" />
+                  EXPERIENCIA EXCLUSIVA
+                  <Sparkles className="h-3 w-3" />
+                </span>
+              </motion.div>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="relative w-full h-14 bg-gradient-to-r from-flame via-orange-500 to-gold hover:from-flame hover:via-orange-500 hover:to-gold text-white font-[family-name:var(--font-archivo-black)] text-sm sm:text-base uppercase tracking-wider rounded-xl animate-reserve-pulse transition-all duration-300 disabled:opacity-50 overflow-hidden group"
+            >
+              {/* Shimmer sweep effect */}
+              <span className="absolute inset-0 overflow-hidden rounded-xl">
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer-sweep_2.5s_ease-in-out_infinite]" />
               </span>
-            )}
-          </Button>
+
+              {isSubmitting ? (
+                <motion.span
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  className="inline-block"
+                >
+                  🔥
+                </motion.span>
+              ) : (
+                <span className="relative z-10 flex items-center gap-2">
+                  <motion.span
+                    animate={{ scale: [1, 1.3, 1], rotate: [0, 15, -15, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="inline-block"
+                  >
+                    <Sparkles className="h-4 w-4 text-white" />
+                  </motion.span>
+                  RESERVAR AHORA
+                  <Send className="h-4 w-4" />
+                </span>
+              )}
+            </Button>
+          </div>
         </motion.form>
       </div>
     </section>

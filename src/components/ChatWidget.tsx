@@ -756,7 +756,7 @@ export default function ChatWidget() {
                               exit={{ opacity: 0, scale: 0.7, y: -5 }}
                               transition={{ duration: 0.25 }}
                               onClick={() => handleSuggestionClick(s)}
-                              className="rounded-full border border-flame/20 bg-flame/5 px-3 py-1.5 text-[11px] text-flame/80 hover:bg-flame/15 hover:border-flame/40 transition-colors cursor-pointer"
+                              className="rounded-full border border-flame/20 bg-flame/5 px-3 py-1.5 text-[11px] text-flame/80 hover:bg-flame/15 hover:border-flame/40 transition-colors cursor-pointer dopamine-hint"
                             >
                               {s.label}
                             </motion.button>
